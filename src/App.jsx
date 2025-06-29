@@ -1,3 +1,6 @@
+import React from "react";
+
+import ReactDOM from "react-dom";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 // import FloatingSearchBar from "./components/FloatingSearchBar";
@@ -9,6 +12,7 @@ import FilterPage from "./FilterPage";
 import { useState } from 'react';
 import AnimatedBackground from "./components/AnimatedBackground";
 
+
 function App() {
   const [bgColor, setBgColor] = useState("#234");
   const [dark, setDark] = useState(false);
@@ -19,7 +23,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
 
   return (
-    <HashRouter>
+    <Router>
       {/* Sidebar: fixed on the left */}
       <Sidebar
         bgColor={bgColor}
@@ -108,7 +112,7 @@ function App() {
           </div>
         </div>
       
-    </HashRouter>
+    </Router>
   );
 }
 
