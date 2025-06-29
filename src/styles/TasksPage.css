@@ -1,0 +1,28 @@
+.tasks-page {
+  padding: 2rem;
+   margin-left:200px;
+  
+  color: #fff;
+  min-height: 100vh;
+  margin-left: 80px;
+  background: linear-gradient(135deg, #1e3c72, #2a5298 80%);
+}
+
+.tasks-page h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.tasks-page select {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tasks-page .task-list {
+  margin-top: 2rem;
+}

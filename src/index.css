@@ -1,0 +1,151 @@
+body, .main-content {
+  font-family: 'IBM Plex Mono', 'Space Mono', 'Fira Mono', 'Consolas', monospace, Arial, sans-serif;
+  background: #1c2732;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+h2, .sidebar-logo {
+  font-family: 'IBM Plex Mono', 'Space Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.sidebar {
+  width: 64px;
+  background: #232b36;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  font-family: 'IBM Plex Mono', 'Space Mono', monospace;
+}
+
+.sidebar-logo {
+  font-size: 2rem;
+  color: #00C9A7;
+  margin: 2rem 0 2rem 0;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.sidebar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  width: 100%;
+  align-items: center;
+}
+
+.sidebar-item {
+  color: #fff;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.sidebar-item:hover {
+  background: #00C9A7;
+  color: #232b36;
+  border-radius: 12px;
+}
+
+.sidebar-divider {
+  width: 70%;
+  height: 2px;
+  background: #444851;
+  margin: 2rem 0 1rem 0;
+  border-radius: 1px;
+}
+
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.sidebar-bottom .sidebar-item {
+  font-size: 1.5rem;
+}
+
+.tooltip {
+  position: absolute;
+  left: 70px;
+  background: #111;
+  color: #00C9A7;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.sidebar-item:hover .tooltip {
+  opacity: 1;
+}
+
+
+button, .add-task-btn {
+  font-family: inherit;
+  background: #00C9A7;
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+}
+button:hover, .add-task-btn:hover {
+  background: #14eac7;
+  color: #1c2732;
+}
+
+input, select {
+  font-family: inherit;
+  background: #232b36;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+input:focus, select:focus {
+  border: 1.5px solid #00C9A7;
+}
+
+.add-task-btn {
+  margin-left: 1rem;
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 48px;
+    min-width: 48px;
+  }
+  .main-content {
+    margin-left: 48px !important;
+  }
+}

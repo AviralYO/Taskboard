@@ -1,0 +1,26 @@
+.floating-search-bar {
+  height: 38px;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+  border-radius: 22px;
+  width: 320px;
+  margin: 2rem auto 0 auto;
+  display: block;
+}
+
+.floating-search-bar::placeholder {
+  color: #888;
+  opacity: 1;
+}
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+.main-content {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}

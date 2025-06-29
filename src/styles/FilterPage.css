@@ -1,0 +1,32 @@
+.filter-page {
+  padding: 2rem;
+  color: #fff;
+  min-height: 100vh;
+  margin-left: 80px;
+  background: linear-gradient(135deg, #232526, #414345 80%);
+}
+
+.filter-page h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-page label {
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+.filter-page select,
+.filter-page input[type="date"] {
+  padding: 0.4rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1rem;
+  margin-right: 1.5rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.filter-page .task-list {
+  margin-top: 2rem;
+}
