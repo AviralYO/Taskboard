@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 // import FloatingSearchBar from "./components/FloatingSearchBar";
 import HomePage from "./components/HomePage";
@@ -19,7 +19,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
 
   return (
-    <Router>
+    <HashRouter>
       {/* Sidebar: fixed on the left */}
       <Sidebar
         bgColor={bgColor}
@@ -108,7 +108,7 @@ function App() {
           </div>
         </div>
       
-    </Router>
+    </HashRouter>
   );
 }
 
