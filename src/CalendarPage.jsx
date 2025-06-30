@@ -6,9 +6,12 @@ import "react-calendar/dist/Calendar.css";
 
 export default function CalendarPage({ tasks = [], bgColor = "#181f2c", dark = false }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const selectedTasks = tasks.filter(
-    t => t.due === selectedDate.toISOString().split("T")[0]
-  );
+  const pad = n => n.toString().padStart(2, '0');
+const localDateStr = `${selectedDate.getFullYear()}-${pad(selectedDate.getMonth() + 1)}-${pad(selectedDate.getDate())}`;
+const selectedTasks = tasks.filter(
+  t => t.due === localDateStr
+);
+
 
   return (
     <div
@@ -44,11 +47,14 @@ export default function CalendarPage({ tasks = [], bgColor = "#181f2c", dark = f
           onChange={setSelectedDate}
           value={selectedDate}
           tileContent={({ date }) => {
-            const hasTasks = tasks.some(
-              t => t.due === date.toISOString().split("T")[0]
-            );
-            return hasTasks ? <span style={{ color: "#00C9A7", fontWeight: "bold" }}>•</span> : null;
-          }}
+  const pad = n => n.toString().padStart(2, '0');
+  const localDateStr = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  const hasTasks = tasks.some(
+    t => t.due === localDateStr
+  );
+  return hasTasks ? <span style={{ color: "#00C9A7", fontWeight: "bold" }}>•</span> : null;
+}}
+
           
         />
       </div>
