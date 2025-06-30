@@ -23,7 +23,8 @@ function App() {
   ]);
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000")
+        fetch("https://taskboard-lyart.vercel.app/api/tasks")
+
       .then((res) => res.json())
       .then((data) => setTasks(data))
       .catch((err) => console.error("Error fetching tasks:", err));
