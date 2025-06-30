@@ -23,7 +23,7 @@ function App() {
   ]);
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
-        fetch("https://taskboard-lyart.vercel.app/api/tasks")
+    fetch("https://taskboardd.vercel.app/api/tasks")
 
       .then((res) => res.json())
       .then((data) => setTasks(data))
