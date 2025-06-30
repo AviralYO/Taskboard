@@ -20,12 +20,18 @@ const sidebarItems = [
   { icon: <FaFilter />, label: "Filter", path: "/filter" },
 ];
 
+
 export default function Sidebar({ bgColor, setBgColor, dark, setDark }) {
   const [expanded, setExpanded] = useState(false);
   const [showPalette, setShowPalette] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const location = useLocation();
+  const filteredItems = sidebarItems
+    .filter(item => item.type !== "search")
+    .filter(item =>
+      item.label.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
   return (
     <aside
@@ -62,11 +68,11 @@ export default function Sidebar({ bgColor, setBgColor, dark, setDark }) {
         letterSpacing: 2,
         transition: "padding 0.3s",
       }}>
-        <Link to="/" style={{ color: "#00C9A7", textDecoration: "none" }}>TM</Link>
+        <Link to="/" style={{ color: "#00C9A7", textDecoration: "none" }}> TB </Link>
       </div>
 
       {/* Navigation */}
-      <nav style={{ flex: 1, width: "100%" }}>
+      <nav style={{ flex: 1, width: "100%" }}/>
         {sidebarItems.map((item, idx) => {
           // Special handling for Search
           if (item.type === "search") {
@@ -101,6 +107,7 @@ export default function Sidebar({ bgColor, setBgColor, dark, setDark }) {
               </div>
             );
           }
+        
 
           // Normal navigation items
           const isActive = location.pathname === item.path;
@@ -139,29 +146,17 @@ export default function Sidebar({ bgColor, setBgColor, dark, setDark }) {
         })}
 
         {/* Search Input (shows below search icon when toggled) */}
-        {showSearch && (
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            value={searchValue}
-            onChange={e => setSearchValue(e.target.value)}
-            autoFocus
-            style={{
-              width: expanded ? "85%" : "90%",
-              margin: "0.5rem auto 0.5rem auto",
-              padding: "0.5rem 1rem",
-              borderRadius: 8,
-              border: "none",
-              outline: "none",
-              fontSize: 16,
-              background: "#fff",
-              color: "#23295a",
-              display: "block",
-              transition: "width 0.2s"
-            }}
-          />
-        )}
-      </nav>
+       
+      {showSearch && (
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
+          style={{ width: expanded ? "85%" : "90%" }}
+        />
+      )}
+    
 
       {/* Bottom Controls */}
       <div style={{
@@ -210,6 +205,7 @@ export default function Sidebar({ bgColor, setBgColor, dark, setDark }) {
           {dark ? <FaSun /> : <FaMoon />}
         </button>
       </div>
+      
     </aside>
   );
 }
