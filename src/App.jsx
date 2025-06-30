@@ -1,4 +1,4 @@
-import React from "react";
+
 
 import ReactDOM from "react-dom";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
@@ -9,7 +9,8 @@ import CalendarPage from "./CalendarPage";
 import TasksPage from "./components/TasksPage";
 import ProjectsPage from "./ProjectsPage";
 import FilterPage from "./FilterPage";
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import AnimatedBackground from "./components/AnimatedBackground";
 
 
@@ -21,6 +22,12 @@ function App() {
     { id: "2", name: "Work", color: "#2c5364" }
   ]);
   const [tasks, setTasks] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:5000")
+      .then((res) => res.json())
+      .then((data) => setTasks(data))
+      .catch((err) => console.error("Error fetching tasks:", err));
+  }, []);
 
   return (
     <Router>
