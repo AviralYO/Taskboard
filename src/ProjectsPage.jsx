@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { MdDragHandle } from "react-icons/md"; // <-- Import the drag handle icon
+import { MdDragHandle, MdDelete } from "react-icons/md";
 
 const colorChoices = [
   "#00C9A7", "#2c5364", "#ff6b6b", "#feca57", "#1dd1a1", "#fff", "#111", "#9b59b6", "#e67e22"
@@ -21,6 +21,12 @@ export default function ProjectsPage({ projects = [], setProjects, tasks = [], s
     ]);
     setNewName("");
     setNewProjectColor(colorChoices[0]);
+  }
+
+  function deleteProject(id) {
+    setProjects(projects.filter(p => p.id !== id));
+    setTasks(tasks.filter(t => t.projectId !== id));
+    if (selectedProjectId === id) setSelectedProjectId(null);
   }
 
   const selectedProject = projects.find(p => p.id === selectedProjectId);
@@ -112,7 +118,6 @@ export default function ProjectsPage({ projects = [], setProjects, tasks = [], s
         {projects.map(p => (
           <div
             key={p.id}
-            onClick={() => setSelectedProjectId(p.id)}
             style={{
               background: selectedProjectId === p.id ? "#00C9A7" : "rgba(255,255,255,0.08)",
               borderRadius: "1rem",
@@ -124,10 +129,29 @@ export default function ProjectsPage({ projects = [], setProjects, tasks = [], s
               boxShadow: "0 2px 12px rgba(0,0,0,0.10)",
               borderLeft: `8px solid ${p.color}`,
               transition: "transform 0.2s, background 0.2s",
-              cursor: "pointer"
+              cursor: "pointer",
+              position: "relative"
             }}
+            onClick={() => setSelectedProjectId(p.id)}
           >
             {p.name}
+            {/* Delete button */}
+            <button
+              onClick={e => { e.stopPropagation(); deleteProject(p.id); }}
+              style={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+                background: "transparent",
+                border: "none",
+                color: "#ff6b6b",
+                fontSize: "1.5rem",
+                cursor: "pointer"
+              }}
+              title="Delete Project"
+            >
+              <MdDelete />
+            </button>
           </div>
         ))}
       </div>
@@ -165,7 +189,6 @@ export default function ProjectsPage({ projects = [], setProjects, tasks = [], s
                               ...provided.draggableProps.style
                             }}
                           >
-                            {/* Drag handle icon */}
                             <span
                               {...provided.dragHandleProps}
                               style={{
@@ -180,7 +203,6 @@ export default function ProjectsPage({ projects = [], setProjects, tasks = [], s
                             >
                               <MdDragHandle />
                             </span>
-                            {/* Task content */}
                             {task.desc} | Due: {task.due} | Priority: <span style={{ color: "#00C9A7" }}>{task.priority}</span>
                           </li>
                         )}

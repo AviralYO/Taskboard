@@ -1,14 +1,13 @@
 import { useState } from "react";
 import TaskModal from "./TaskModal";
 import { v4 as uuidv4 } from "uuid";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import React from "react";
+import { MdDelete, MdDone } from "react-icons/md";
 
 export default function TasksPage({ selectedProjectId, projects, setProjects, tasks, setTasks, dark }) {
   const [showTaskModal, setShowTaskModal] = useState(false);
 
   function handleAddTask(task) {
-    setTasks([...tasks, { ...task, id: uuidv4() }]);
+    setTasks([...tasks, { ...task, id: uuidv4(), completed: false }]);
   }
 
   function handleAddProject(name, color) {
@@ -17,14 +16,24 @@ export default function TasksPage({ selectedProjectId, projects, setProjects, ta
     return id;
   }
 
-  // Drag and Drop handler
-  function handleOnDragEnd(result) {
-    if (!result.destination) return;
-    const items = Array.from(tasks);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setTasks(items);
+  function handleDeleteTask(id) {
+    setTasks(tasks.filter(task => task.id !== id));
   }
+
+  function handleMarkDone(id) {
+    setTasks(tasks.map(task =>
+      task.id === id ? { ...task, completed: true } : task
+    ));
+  }
+
+  function handleMarkUndone(id) {
+    setTasks(tasks.map(task =>
+      task.id === id ? { ...task, completed: false } : task
+    ));
+  }
+
+  const activeTasks = tasks.filter(task => !task.completed);
+  const completedTasks = tasks.filter(task => task.completed);
 
   return (
     <div className="main-content" style={{ marginLeft: "5px", minHeight: "100vh", width: "calc(100vw - 5px)" }}>
@@ -59,46 +68,110 @@ export default function TasksPage({ selectedProjectId, projects, setProjects, ta
             dark={dark}
           />
         )}
-        {/* Render tasks here with drag-and-drop */}
-        {tasks.length === 0 ? (
+
+        {/* Active Tasks */}
+        <h3 style={{ color: "#00C9A7", marginTop: "2rem" }}>Active Tasks</h3>
+        {activeTasks.length === 0 ? (
           <p>No tasks yet.</p>
         ) : (
-          <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="tasks">
-              {(provided) => (
-                <ul
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  style={{ padding: 0, listStyle: "none" }}
+          <ul>
+            {activeTasks.map(task => (
+              <li key={task.id} style={{
+                display: "flex",
+                alignItems: "center",
+                color: "#fff",
+                background: "rgba(0,0,0,0.13)",
+                marginBottom: "0.5rem",
+                borderRadius: "0.5rem",
+                padding: "0.5rem 1rem",
+                fontFamily: "inherit"
+              }}>
+                <span style={{ flex: 1 }}>
+                  {task.desc} | {task.due} | {task.priority} | Project: {projects.find(p => p.id === task.projectId)?.name}
+                </span>
+                <button
+                  onClick={() => handleMarkDone(task.id)}
+                  style={{
+                    background: "transparent",
+                    color: "#00C9A7",
+                    border: "none",
+                    fontSize: "1.5rem",
+                    cursor: "pointer",
+                    marginRight: "0.5rem"
+                  }}
+                  title="Mark as Done"
                 >
-                  {tasks.map((task, index) => (
-                    <Draggable key={task.id} draggableId={task.id} index={index}>
-                      {(provided, snapshot) => (
-                        <li
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            userSelect: "none",
-                            margin: "0 0 8px 0",
-                            padding: "12px",
-                            borderRadius: "8px",
-                            background: snapshot.isDragging ? "#00C9A7" : "rgba(0,0,0,0.13)",
-                            color: snapshot.isDragging ? "#fff" : "#fff",
-                            boxShadow: snapshot.isDragging ? "0 2px 8px #00C9A7" : "none",
-                            ...provided.draggableProps.style
-                          }}
-                        >
-                          {task.desc} | {task.due} | {task.priority} | Project: {projects.find(p => p.id === task.projectId)?.name}
-                        </li>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-          </DragDropContext>
+                  <MdDone />
+                </button>
+                <button
+                  onClick={() => handleDeleteTask(task.id)}
+                  style={{
+                    background: "transparent",
+                    color: "#ff6b6b",
+                    border: "none",
+                    fontSize: "1.5rem",
+                    cursor: "pointer"
+                  }}
+                  title="Delete Task"
+                >
+                  <MdDelete />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Completed Tasks */}
+        <h3 style={{ color: "#00C9A7", marginTop: "2.5rem" }}>Completed Tasks</h3>
+        {completedTasks.length === 0 ? (
+          <p>No completed tasks yet.</p>
+        ) : (
+          <ul>
+            {completedTasks.map(task => (
+              <li key={task.id} style={{
+                display: "flex",
+                alignItems: "center",
+                color: "#aaa",
+                background: "rgba(0,0,0,0.08)",
+                marginBottom: "0.5rem",
+                borderRadius: "0.5rem",
+                padding: "0.5rem 1rem",
+                fontFamily: "inherit",
+                textDecoration: "line-through"
+              }}>
+                <span style={{ flex: 1 }}>
+                  {task.desc} | {task.due} | {task.priority} | Project: {projects.find(p => p.id === task.projectId)?.name}
+                </span>
+                <button
+                  onClick={() => handleMarkUndone(task.id)}
+                  style={{
+                    background: "transparent",
+                    color: "#00C9A7",
+                    border: "none",
+                    fontSize: "1.5rem",
+                    cursor: "pointer",
+                    marginRight: "0.5rem"
+                  }}
+                  title="Mark as Not Done"
+                >
+                  <MdDone />
+                </button>
+                <button
+                  onClick={() => handleDeleteTask(task.id)}
+                  style={{
+                    background: "transparent",
+                    color: "#ff6b6b",
+                    border: "none",
+                    fontSize: "1.5rem",
+                    cursor: "pointer"
+                  }}
+                  title="Delete Task"
+                >
+                  <MdDelete />
+                </button>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     </div>
