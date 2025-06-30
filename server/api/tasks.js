@@ -9,7 +9,7 @@ if (!mongoose.connection.readyState) {
 
 const taskSchema = new mongoose.Schema({
   title: String,
-  completed: { type: Boolean, default: false },
+ completed: { type: Boolean, default: false },
 });
 const Task = mongoose.models.Task || mongoose.model("Task", taskSchema);
 
@@ -23,5 +23,9 @@ export default async function handler(req, res) {
     return res.status(201).json(task);
   } else {
     res.status(405).end(); // Method Not Allowed
+    app.get('/', (req, res) => {
+  res.send('API is running');
+});
+
   }
 }

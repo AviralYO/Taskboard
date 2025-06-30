@@ -23,7 +23,7 @@ function App() {
   ]);
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
-    fetch("https://taskboardd.vercel.app/api/tasks")
+   fetch("https://taskboard-0f00.onrender.com/api")
 
       .then((res) => res.json())
       .then((data) => setTasks(data))
