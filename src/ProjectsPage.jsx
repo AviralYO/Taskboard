@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { MdDragHandle } from "react-icons/md"; // <-- Import the drag handle icon
 
-// Optional: Add more colors if you want
 const colorChoices = [
   "#00C9A7", "#2c5364", "#ff6b6b", "#feca57", "#1dd1a1", "#fff", "#111", "#9b59b6", "#e67e22"
 ];
@@ -24,6 +25,18 @@ export default function ProjectsPage({ projects = [], setProjects, tasks = [], s
 
   const selectedProject = projects.find(p => p.id === selectedProjectId);
   const projectTasks = tasks.filter(t => t.projectId === selectedProjectId);
+
+  function handleProjectTaskDragEnd(result) {
+    if (!result.destination) return;
+    const from = result.source.index;
+    const to = result.destination.index;
+    const reordered = Array.from(projectTasks);
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(to, 0, moved);
+
+    const otherTasks = tasks.filter(t => t.projectId !== selectedProjectId);
+    setTasks([...otherTasks, ...reordered]);
+  }
 
   return (
     <div style={{
@@ -60,7 +73,6 @@ export default function ProjectsPage({ projects = [], setProjects, tasks = [], s
             color: dark ? "#fff" : "#222"
           }}
         />
-        {/* Color picker */}
         <div style={{ display: "flex", gap: "0.5rem" }}>
           {colorChoices.map(color => (
             <div
@@ -127,19 +139,58 @@ export default function ProjectsPage({ projects = [], setProjects, tasks = [], s
           {projectTasks.length === 0 ? (
             <p style={{ color: "#fff" }}>No tasks for this project.</p>
           ) : (
-            <ul>
-              {projectTasks.map(task => (
-                <li key={task.id} style={{
-                  color: "#fff",
-                  background: "rgba(0,0,0,0.13)",
-                  marginBottom: "0.5rem",
-                  borderRadius: "0.5rem",
-                  padding: "0.5rem 1rem"
-                }}>
-                  {task.desc} | Due: {task.due} | Priority: <span style={{ color: "#00C9A7" }}>{task.priority}</span>
-                </li>
-              ))}
-            </ul>
+            <DragDropContext onDragEnd={handleProjectTaskDragEnd}>
+              <Droppable droppableId="project-tasks">
+                {(provided) => (
+                  <ul
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={{ padding: 0, listStyle: "none" }}
+                  >
+                    {projectTasks.map((task, index) => (
+                      <Draggable key={task.id} draggableId={task.id} index={index}>
+                        {(provided, snapshot) => (
+                          <li
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              color: "#fff",
+                              background: snapshot.isDragging ? "#00C9A7" : "rgba(0,0,0,0.13)",
+                              marginBottom: "0.5rem",
+                              borderRadius: "0.5rem",
+                              padding: "0.5rem 1rem",
+                              boxShadow: snapshot.isDragging ? "0 2px 8px #00C9A7" : "none",
+                              ...provided.draggableProps.style
+                            }}
+                          >
+                            {/* Drag handle icon */}
+                            <span
+                              {...provided.dragHandleProps}
+                              style={{
+                                cursor: "grab",
+                                marginRight: "1rem",
+                                fontSize: "1.5rem",
+                                color: "#00C9A7",
+                                display: "flex",
+                                alignItems: "center"
+                              }}
+                              title="Drag to reorder"
+                            >
+                              <MdDragHandle />
+                            </span>
+                            {/* Task content */}
+                            {task.desc} | Due: {task.due} | Priority: <span style={{ color: "#00C9A7" }}>{task.priority}</span>
+                          </li>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </ul>
+                )}
+              </Droppable>
+            </DragDropContext>
           )}
         </div>
       )}
